@@ -15,7 +15,7 @@
 
 	@if (reversedMessage != "")
 	{
-		if (IsPalindrome)
+		if (isPalindrome)
 		{
 			<Message DisplayMessage="@displayMessage" Title="The message is a palindrome" CssClass="alert-success" />
 		}
@@ -30,7 +30,7 @@
 	private string message = "Reverse Me";
 	private string reversedMessage = "";
 	private string displayMessage = "";
-	private bool IsPalindrome = false;
+	private bool isPalindrome = false;
 
 	private void ReverseMessage()
 	{
@@ -43,7 +43,7 @@
 
 		if (reversedMessage == message)
 		{
-			IsPalindrome = true;
+			isPalindrome = true;
 		}
 
 		displayMessage = $"The reverse of '{message}' is '{reversedMessage}'";
