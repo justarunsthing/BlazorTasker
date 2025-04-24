@@ -12,15 +12,25 @@
 		</button>
 	</div>
 	<hr />
-	<div>
-		@displayMessage
-	</div>
+
+	@if (reversedMessage != "")
+	{
+		if (IsPalindrome)
+		{
+			<Message DisplayMessage="@displayMessage" Title="The message is a palindrome" CssClass="alert-success" />
+		}
+		else
+		{
+			<Message DisplayMessage="@displayMessage" Title="The message is not a palindrome" CssClass="alert-danger" />
+		}
+	}
 </div>
 
 @code {
 	private string message = "Reverse Me";
 	private string reversedMessage = "";
 	private string displayMessage = "";
+	private bool IsPalindrome = false;
 
 	private void ReverseMessage()
 	{
@@ -31,6 +41,11 @@
 			reversedMessage += message[i];
 		}
 
-		displayMessage = $"The reverse of {message} is {reversedMessage}";
+		if (reversedMessage == message)
+		{
+			IsPalindrome = true;
+		}
+
+		displayMessage = $"The reverse of '{message}' is '{reversedMessage}'";
 	}
 }
