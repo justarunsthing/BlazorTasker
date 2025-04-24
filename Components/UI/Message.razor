@@ -1,0 +1,15 @@
+﻿<div class="alert @CssClass border border-1 border-dark">
+	<h4>@Title</h4>
+	<div>@DisplayMessage</div>
+</div>
+
+@code {
+	[Parameter, EditorRequired]
+	public string DisplayMessage { get; set; } = "";
+
+	[Parameter]
+	public string Title { get; set; } = "";
+
+	[Parameter]
+	public string CssClass { get; set; } = "alert-success";
+}
