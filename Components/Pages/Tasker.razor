@@ -6,7 +6,7 @@
 			<img src="/img/tasker_600.png" width="300" />
 		</div>
 		<div>
-			<EditForm Model="item">
+			<EditForm Model="item" OnValidSubmit="AddTask">
 				<DataAnnotationsValidator />
 				<div class="d-flex flex-row gap-2">
 					<InputText class="form-control" placeholder="Enter a task" @bind-Value="item.Name" />
@@ -18,9 +18,23 @@
 			</EditForm>
 		</div>
 		<hr />
+		<div class="vstack">
+			@foreach (var item in taskerItems)
+			{
+				<TaskerLine Item="item" />
+			}
+		</div>
 	</div>
 </div>
 
 @code {
 	private TaskerItem item = new();
+	private List<TaskerItem> taskerItems = new();
+
+	private void AddTask()
+	{
+		item.Id = Guid.NewGuid();
+		taskerItems.Add(item);
+		item = new();
+	}
 }
