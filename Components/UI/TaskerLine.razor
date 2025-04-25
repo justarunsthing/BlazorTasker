@@ -1,0 +1,16 @@
+﻿<div class="d-flex">
+	<div>
+		<InputCheckbox @bind-Value="Item.IsCompleted"></InputCheckbox>
+	</div>
+	<div class="px-2 flex-grow-1">
+		@Item.Name
+	</div>
+	<div>
+		<i class="bi bi-trash-fill text-danger"></i>
+	</div>
+</div>
+
+@code {
+	[Parameter, EditorRequired]
+	public TaskerItem? Item { get; set; }
+}
