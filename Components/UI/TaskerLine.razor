@@ -6,11 +6,24 @@
 		@Item.Name
 	</div>
 	<div>
-		<i class="bi bi-trash-fill text-danger"></i>
+		<button class="btn" @onclick="DeleteItem">
+			<i class="bi bi-trash-fill text-danger"></i>
+		</button>
 	</div>
 </div>
 
 @code {
 	[Parameter, EditorRequired]
 	public TaskerItem? Item { get; set; }
+
+	/// <summary>
+	/// Event handler to send back TaskerItem to the parent component
+	/// </summary>
+	[Parameter]
+	public EventCallback<TaskerItem> OnDeleteCallBack { get; set; } 
+
+	private async Task DeleteItem()
+	{
+		await OnDeleteCallBack.InvokeAsync(Item);
+	}
 }
