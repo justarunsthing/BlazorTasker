@@ -1,8 +1,8 @@
 ﻿<div class="d-flex">
 	<div>
-		<InputCheckbox @bind-Value="Item.IsCompleted"></InputCheckbox>
+		<InputCheckbox @bind-Value="Item.IsCompleted" @bind-Value:after="UpdateItem"></InputCheckbox>
 	</div>
-	<div class="px-2 flex-grow-1">
+	<div id="item-name" class="px-2 flex-grow-1 @(Item.IsCompleted ? "complete" : "")">
 		@Item.Name
 	</div>
 	<div>
@@ -20,10 +20,18 @@
 	/// Event handler to send back TaskerItem to the parent component
 	/// </summary>
 	[Parameter]
-	public EventCallback<TaskerItem> OnDeleteCallBack { get; set; } 
+	public EventCallback<TaskerItem> OnDeleteCallBack { get; set; }
+
+	[Parameter]
+	public EventCallback<TaskerItem> OnCompleteCallback { get; set; }
 
 	private async Task DeleteItem()
 	{
 		await OnDeleteCallBack.InvokeAsync(Item);
+	}
+
+	private async Task UpdateItem()
+	{
+		await OnCompleteCallback.InvokeAsync(Item);
 	}
 }
