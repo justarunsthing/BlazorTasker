@@ -21,7 +21,7 @@
 		<div class="vstack">
 			@foreach (var item in taskerItems)
 			{
-				<TaskerLine Item="item" />
+				<TaskerLine Item="item" OnDeleteCallBack="DeleteTask"/>
 			}
 		</div>
 	</div>
@@ -36,5 +36,14 @@
 		item.Id = Guid.NewGuid();
 		taskerItems.Add(item);
 		item = new();
+	}
+
+	/// <summary>
+	/// Event callback function to delete a task from the child component
+	/// </summary>
+	/// <param name="item"></param>
+	private void DeleteTask(TaskerItem item)
+	{
+		taskerItems.Remove(item);
 	}
 }
