@@ -1,4 +1,7 @@
 ﻿@page "/tasker"
+@using System.Text.Json
+@using System.Text.Json.Serialization
+@inject IJSRuntime JS
 
 <div class="d-flex align-items-center justify-content-center">
 	<div class=" task p-5">
@@ -6,7 +9,7 @@
 			<img src="/img/tasker_600.png" width="300" />
 		</div>
 		<div>
-			<EditForm Model="item" OnValidSubmit="AddTask">
+			<EditForm Model="item" OnValidSubmit="AddTaskAsync">
 				<DataAnnotationsValidator />
 				<div class="d-flex flex-row gap-2">
 					<InputText class="form-control" placeholder="Enter a task" @bind-Value="item.Name" />
@@ -31,11 +34,13 @@
 	private TaskerItem item = new();
 	private List<TaskerItem> taskerItems = new();
 
-	private void AddTask()
+	private async Task AddTaskAsync()
 	{
 		item.Id = Guid.NewGuid();
 		taskerItems.Add(item);
 		item = new();
+
+		await SaveListAsync();
 	}
 
 	/// <summary>
@@ -50,5 +55,12 @@
 	private void UpdateTask(TaskerItem item)
 	{
 		// TODO: Save to local storage
+	}
+
+	private async Task SaveListAsync()
+	{
+		string? taskerItemsJson = JsonSerializer.Serialize(taskerItems);
+
+		await JS.InvokeVoidAsync("localStorage.setItem", "TaskerList", taskerItemsJson);
 	}
 }
