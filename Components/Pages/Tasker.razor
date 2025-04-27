@@ -12,7 +12,7 @@
 			<EditForm Model="item" OnValidSubmit="AddTaskAsync">
 				<DataAnnotationsValidator />
 				<div class="d-flex flex-row gap-2">
-					<InputText class="form-control" placeholder="Enter a task" @bind-Value="item.Name" />
+					<InputText @ref=inputText class="form-control" placeholder="Enter a task" @bind-Value="item.Name"/>
 					<button type="submit" class="btn btn-primary">Add</button>
 				</div>
 				<div>
@@ -33,11 +33,22 @@
 @code {
 	private TaskerItem item = new();
 	private List<TaskerItem> taskerItems = new();
+	private InputText? inputText { get; set; } // Like giving an id to the InputText element
 
 	// Overridden as we want to get list after everything has loaded on the page
+	// All the controls are necessarily not there
 	protected override async Task OnInitializedAsync()
 	{
 		await LoadListAsync();
+	}
+
+	// After page has loaded, UI has finished loading, all controls are there
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			await inputText.Element.Value.FocusAsync();
+		}
 	}
 
 	private async Task AddTaskAsync()
@@ -47,6 +58,7 @@
 		item = new();
 
 		await SaveListAsync();
+		await inputText.Element.Value.FocusAsync();
 	}
 
 	/// <summary>
