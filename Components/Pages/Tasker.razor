@@ -24,7 +24,7 @@
 		<div class="vstack">
 			@foreach (var item in taskerItems)
 			{
-				<TaskerLine Item="item" OnDeleteCallBack="DeleteTask" />
+				<TaskerLine Item="item" OnDeleteCallBack="DeleteTaskAsync" OnCompleteCallback="CompleteTaskAsync" />
 			}
 		</div>
 	</div>
@@ -53,20 +53,20 @@
 	/// Event callback function to delete a task from the child component
 	/// </summary>
 	/// <param name="item"></param>
-	private void DeleteTask(TaskerItem item)
+	private async Task DeleteTaskAsync(TaskerItem item)
 	{
 		taskerItems.Remove(item);
+		await SaveListAsync();
 	}
 
-	private void UpdateTask(TaskerItem item)
+	private async Task CompleteTaskAsync(TaskerItem item)
 	{
-		// TODO: Save to local storage
+		await SaveListAsync();
 	}
 
 	private async Task SaveListAsync()
 	{
 		string? taskerItemsJson = JsonSerializer.Serialize(taskerItems);
-
 		await JS.InvokeVoidAsync("localStorage.setItem", "TaskerList", taskerItemsJson);
 	}
 
