@@ -34,6 +34,12 @@
 	private TaskerItem item = new();
 	private List<TaskerItem> taskerItems = new();
 
+	// Overridden as we want to get list after everything has loaded on the page
+	protected override async Task OnInitializedAsync()
+	{
+		await LoadListAsync();
+	}
+
 	private async Task AddTaskAsync()
 	{
 		item.Id = Guid.NewGuid();
@@ -62,5 +68,20 @@
 		string? taskerItemsJson = JsonSerializer.Serialize(taskerItems);
 
 		await JS.InvokeVoidAsync("localStorage.setItem", "TaskerList", taskerItemsJson);
+	}
+
+	private async Task LoadListAsync()
+	{
+		try
+		{
+			// getItem returns a JSON list
+			string taskerItemsJson = await JS.InvokeAsync<string>("localStorage.getItem", "TaskerList") ?? "[]"; // if null, empty string of an array
+			taskerItems = JsonSerializer.Deserialize<List<TaskerItem>>(taskerItemsJson);
+		}
+		catch (Exception ex)
+		{
+			taskerItems = new();
+			await SaveListAsync();
+		}
 	}
 }
